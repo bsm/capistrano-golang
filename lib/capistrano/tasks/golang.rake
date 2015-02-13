@@ -8,26 +8,24 @@ namespace :go do
   end
 
   task :hook do
-    target = File.join(fetch(:go_root), fetch(:go_version))
-
+    goroot = fetch(:go_root)
     on roles(fetch(:go_roles)) do
-      SSHKit.config.command_map.prefix[:go].unshift "GOROOT=#{target} PATH=#{target}/bin:$PATH"
+      SSHKit.config.command_map.prefix[:go].unshift "GOROOT=#{goroot} PATH=#{goroot}/bin:$PATH"
     end
   end
 
   task :check do
-    target = File.join(fetch(:go_root), fetch(:go_version))
-
+    goroot = fetch(:go_root)
     on roles(fetch(:go_roles)) do
-      if not test "[ -d #{target}/src ]"
+      if not test "[ -d #{goroot}/src ]"
         info "Downloading #{fetch :go_version}"
-        execute :mkdir, "-p", target
-        execute :curl, "-L #{fetch :go_source}/#{fetch :go_version}.tar.gz | tar xvz --strip-components=1 -C #{target}"
+        execute :mkdir, "-p", goroot
+        execute :curl, "-sSL #{fetch :go_source} | tar xvz --strip-components=1 -C #{goroot}"
       end
 
-      if not test "[ -f #{target}/bin/go ]"
-        info "Installing #{fetch(:go_version)}"
-        execute %(cd #{target}/src && ./make.bash)
+      if not test "[ -f #{goroot}/bin/go ]"
+        info "Installing #{fetch :go_version}"
+        execute %(cd #{goroot}/src && ./make.bash --no-clean 2>&1)
       end
     end
   end
@@ -42,8 +40,12 @@ after 'deploy:check', 'go:check'
 namespace :load do
   task :defaults do
     set :go_version, "go1.4.1"
-    set :go_root, "~/.gos"
-    set :go_roles, :all
-    set :go_source, "https://github.com/golang/go/archive"
+    set :go_roles,   :all
+
+    set :go_install_path, "~/.gos"
+    set :go_archive,      "https://golang.org/dl/VERSION.src.tar.gz"
+
+    set :go_root,   -> { File.join(fetch(:go_install_path), fetch(:go_version)) }
+    set :go_source, -> { fetch(:go_archive).sub("VERSION", fetch(:go_version)) }
   end
 end
