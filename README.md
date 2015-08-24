@@ -20,7 +20,7 @@ Use capistrano to deploy Go projects
   set :go_version, "go1.4.2"
   ```
 
-For all configuration options, please see the [defaults](https://github.com/bsm/capistrano-golang/blob/master/lib/capistrano/tasks/golang.rake#L45) section.
+For all configuration options, please see the [defaults](https://github.com/bsm/capistrano-golang/blob/master/lib/capistrano/tasks/golang.rake#L52) section.
 
 ### Licence
 
