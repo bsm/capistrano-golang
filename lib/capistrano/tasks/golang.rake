@@ -47,7 +47,7 @@ namespace :load do
     set :go_roles,   :all
 
     set :go_install_path, "~/.gos"
-    set :go_install_env,  -> { goroot_bootstrap: File.join(fetch(:go_install_path), "go1.4") }
+    set :go_install_env,  -> { {goroot_bootstrap: File.join(fetch(:go_install_path), "go1.4")} }
     set :go_archive,      "https://golang.org/dl/VERSION.src.tar.gz"
 
     set :go_root,   -> { File.join(fetch(:go_install_path), fetch(:go_version)) }
