@@ -5,14 +5,17 @@ Use capistrano to deploy Go projects
 ### Usage
 
 1. Add the following line to your Gemfile:
+
   ```ruby
   gem 'capistrano-golang'
   ```
 2. Add the following line to your Capfile:
+
   ```ruby
   require 'capistrano/golang'
   ```
 3. Configure in config/deploy.rb:
+
   ```ruby
   set :go_version, "go1.4.2"
   ```
