@@ -25,7 +25,11 @@ namespace :go do
 
       if not test "[ -f #{goroot}/bin/go ]"
         info "Installing #{fetch :go_version}"
-        execute %(cd #{goroot}/src && ./make.bash --no-clean 2>&1)
+        within "#{goroot}/src" do
+          with fetch(:go_install_env, {}) do
+            execute :"./make.bash", %(--no-clean 2>&1)
+          end
+        end
       end
     end
   end
@@ -39,10 +43,11 @@ after 'deploy:check', 'go:check'
 
 namespace :load do
   task :defaults do
-    set :go_version, "go1.4.1"
+    set :go_version, "go1.5"
     set :go_roles,   :all
 
     set :go_install_path, "~/.gos"
+    set :go_install_env,  -> { goroot_bootstrap: File.join(fetch(:go_install_path), "go1.4") }
     set :go_archive,      "https://golang.org/dl/VERSION.src.tar.gz"
 
     set :go_root,   -> { File.join(fetch(:go_install_path), fetch(:go_version)) }

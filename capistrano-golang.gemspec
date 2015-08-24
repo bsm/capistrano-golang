@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
   gem.name          = "capistrano-golang"
-  gem.version       = '0.2.0'
+  gem.version       = '0.2.1'
   gem.authors       = ["Dimitrij Denissenko"]
   gem.email         = ["dimitrij@blacksquaremedia.com"]
   gem.description   = %q{Go deployment tasks for Capistrano}
